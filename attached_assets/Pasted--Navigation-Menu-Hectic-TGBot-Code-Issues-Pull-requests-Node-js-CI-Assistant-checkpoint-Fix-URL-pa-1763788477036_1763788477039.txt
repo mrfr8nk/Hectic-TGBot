@@ -1,0 +1,289 @@
+
+Navigation Menu
+Hectic-TGBot
+
+Code
+Issues
+Pull requests
+Node.js CI
+Assistant checkpoint: Fix URL parsing and add error handling #3
+build (20.x)
+Started 3m 54s ago
+0s
+1s
+1s
+3s
+3m 48s
+Run npm start
+> hectic-downloader-bot@1.0.0 start
+> node subzero.js
+🚀 HECTIC DOWNLOADER BOT is running...
+👨‍💻 Created by: Darrell Mucheri (Mr Frank)
+Error processing message: TelegramError: ETELEGRAM: 400 Bad Request: BUTTON_DATA_INVALID
+    at /home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/node-telegram-bot-api/src/telegram.js:299:15
+    at tryCatcher (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/util.js:16:23)
+    at Promise._settlePromiseFromHandler (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/promise.js:547:31)
+    at Promise._settlePromise (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/promise.js:604:18)
+    at Promise._settlePromise0 (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/promise.js:649:10)
+    at Promise._settlePromises (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/promise.js:729:18)
+    at _drainQueueStep (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/async.js:93:12)
+    at _drainQueue (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/async.js:86:9)
+    at Async._drainQueues (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/async.js:102:5)
+    at Async.drainQueues [as _onImmediate] (/home/runner/work/Hectic-TGBot/Hectic-TGBot/node_modules/bluebird/js/release/async.js:15:14)
+    at process.processImmediate (node:internal/timers:483:21) {
+  code: 'ETELEGRAM',
+  response: <ref *1> IncomingMessage {
+    _events: {
+      close: [Array],
+      error: [Function (anonymous)],
+      data: [Function (anonymous)],
+      end: [Array],
+      readable: undefined
+    },
+    _readableState: ReadableState {
+      highWaterMark: 16384,
+      buffer: [],
+      bufferIndex: 0,
+      length: 0,
+      pipes: [],
+      awaitDrainWriters: null,
+      [Symbol(kState)]: 194779004
+    },
+    _maxListeners: undefined,
+    socket: null,
+    httpVersionMajor: 1,
+    httpVersionMinor: 1,
+    httpVersion: '1.1',
+    complete: true,
+    rawHeaders: [
+      'Server',
+      'nginx/1.18.0',
+      'Date',
+      'Sat, 22 Nov 2025 05:11:24 GMT',
+      'Content-Type',
+      'application/json',
+      'Content-Length',
+      '78',
+      'Connection',
+      'keep-alive',
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains; preload',
+      'Access-Control-Allow-Origin',
+      '*',
+      'Access-Control-Expose-Headers',
+      'Content-Length,Content-Type,Date,Server,Connection'
+    ],
+    rawTrailers: [],
+    joinDuplicateHeaders: undefined,
+    aborted: false,
+    upgrade: false,
+    url: '',
+    method: null,
+    statusCode: 400,
+    statusMessage: 'Bad Request',
+    client: TLSSocket {
+      _tlsOptions: [Object],
+      _secureEstablished: true,
+      _securePending: false,
+      _newSessionPending: false,
+      _controlReleased: true,
+      secureConnecting: false,
+      _SNICallback: null,
+      servername: 'api.telegram.org',
+      alpnProtocol: false,
+      authorized: true,
+      authorizationError: null,
+      encrypted: true,
+      _events: [Object: null prototype],
+      _eventsCount: 9,
+      connecting: false,
+      _hadError: false,
+      _parent: null,
+      _host: 'api.telegram.org',
+      _closeAfterHandlingError: false,
+      _readableState: [ReadableState],
+      _writableState: [WritableState],
+      allowHalfOpen: false,
+      _maxListeners: undefined,
+      _sockname: null,
+      _pendingData: null,
+      _pendingEncoding: '',
+      server: undefined,
+      _server: null,
+      ssl: [TLSWrap],
+      _requestCert: true,
+      _rejectUnauthorized: true,
+      parser: null,
+      _httpMessage: null,
+      autoSelectFamilyAttemptedAddresses: [Array],
+      timeout: 0,
+      [Symbol(alpncallback)]: null,
+      [Symbol(res)]: [TLSWrap],
+      [Symbol(verified)]: true,
+      [Symbol(pendingSession)]: null,
+      [Symbol(async_id_symbol)]: -1,
+      [Symbol(kHandle)]: [TLSWrap],
+      [Symbol(lastWriteQueueSize)]: 0,
+      [Symbol(timeout)]: null,
+      [Symbol(kBuffer)]: null,
+      [Symbol(kBufferCb)]: null,
+      [Symbol(kBufferGen)]: null,
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false,
+      [Symbol(kSetNoDelay)]: false,
+      [Symbol(kSetKeepAlive)]: true,
+      [Symbol(kSetKeepAliveInitialDelay)]: 1,
+      [Symbol(kBytesRead)]: 0,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(connect-options)]: [Object]
+    },
+    _consuming: false,
+    _dumped: false,
+    req: ClientRequest {
+      _events: [Object: null prototype],
+      _eventsCount: 5,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      destroyed: true,
+      _last: false,
+      chunkedEncoding: false,
+      shouldKeepAlive: true,
+      maxRequestsOnConnectionReached: false,
+      _defaultKeepAlive: true,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      strictContentLength: false,
+      _contentLength: 2482,
+      _hasBody: true,
+      _trailer: '',
+      finished: true,
+      _headerSent: true,
+      _closed: true,
+      socket: [TLSSocket],
+      _header: 'POST /bot8579217430:AAEcglCDYIrH9nqb-aBuz5A9Q_HjuXKAGUQ/sendMessage HTTP/1.1\r\n' +
+        'host: api.telegram.org\r\n' +
+        'content-type: application/x-www-form-urlencoded\r\n' +
+        'content-length: 2482\r\n' +
+        'Connection: keep-alive\r\n' +
+        '\r\n',
+      _keepAliveTimeout: 0,
+      _onPendingData: [Function: nop],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      joinDuplicateHeaders: undefined,
+      path: '/bot8579217430:AAEcglCDYIrH9nqb-aBuz5A9Q_HjuXKAGUQ/sendMessage',
+      _ended: true,
+      res: [Circular *1],
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      reusedSocket: true,
+      host: 'api.telegram.org',
+      protocol: 'https:',
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(kNeedDrain)]: false,
+      [Symbol(corked)]: 0,
+      [Symbol(kOutHeaders)]: [Object: null prototype],
+      [Symbol(errored)]: null,
+      [Symbol(kHighWaterMark)]: 16384,
+      [Symbol(kRejectNonStandardBodyWrites)]: false,
+      [Symbol(kUniqueHeaders)]: null
+    },
+    _eventsCount: 4,
+    request: Request {
+      _events: [Object: null prototype],
+      _eventsCount: 5,
+      _maxListeners: undefined,
+      method: 'POST',
+      simple: false,
+      resolveWithFullResponse: true,
+      forever: true,
+      readable: true,
+      writable: true,
+      explicitMethod: true,
+      _qs: [Querystring],
+      _auth: [Auth],
+      _multipart: [Multipart],
+      _redirect: [Redirect],
+      _tunnel: [Tunnel],
+      _rp_resolve: [Function (anonymous)],
+      _rp_reject: [Function (anonymous)],
+      _rp_promise: [Promise [Object]],
+      _rp_callbackOrig: undefined,
+      callback: [Function (anonymous)],
+      _rp_options: [Object],
+      headers: [Object],
+      setHeader: [Function (anonymous)],
+      hasHeader: [Function (anonymous)],
+      getHeader: [Function (anonymous)],
+      removeHeader: [Function (anonymous)],
+      localAddress: undefined,
+      pool: [Object],
+      dests: [],
+      __isRequestRequest: true,
+      _callback: [Function: RP$callback],
+      uri: [Url],
+      proxy: null,
+      tunnel: true,
+      setHost: true,
+      originalCookieHeader: undefined,
+      _disableCookies: true,
+      _jar: undefined,
+      port: 443,
+      host: 'api.telegram.org',
+      body: 'parse_mode=Markdown&reply_markup=%7B%22inline_keyboard%22%3A%5B%5B%7B%22text%22%3A%22%F0%9F%8E%B5%20Audio%20%28MP3%29%22%2C%22callback_data%22%3A%22audio%7Chttps%3A%2F%2Fyt-dl.officialhectormanuel.workers.dev%2Fstream%3Fid%3DqdpXxGPqW-Y%26format%3Dmp3%26key%3Dd1b08cea64f98461856dfa8b9cc85a3cc6d9d4c4%26title%3DAlan%2520Walker%2520-%2520Faded%2520%28Lyrics%29%22%7D%5D%2C%5B%7B%22text%22%3A%22%F0%9F%93%B9%20144p%22%2C%22callback_data%22%3A%22video%7C144%7Chttps%3A%2F%2Fyt-dl.officialhectormanuel.workers.dev%2Fstream%3Fid%3DqdpXxGPqW-Y%26format%3D144%26key%3Dd1b08cea64f98461856dfa8b9cc85a3cc6d9d4c4%26title%3DAlan%2520Walker%2520-%2520Faded%2520%28Lyrics%29%22%7D%2C%7B%22text%22%3A%22%F0%9F%93%B9%20240p%22%2C%22callback_data%22%3A%22video%7C240%7Chttps%3A%2F%2Fyt-dl.officialhectormanuel.workers.dev%2Fstream%3Fid%3DqdpXxGPqW-Y%26format%3D240%26key%3Dd1b08cea64f98461856dfa8b9cc85a3cc6d9d4c4%26title%3DAlan%2520Walker%2520-%2520Faded%2520%28Lyrics%29%22%7D%2C%7B%22text%22%3A%22%F0%9F%93%B9%20360p%22%2C%22
+      path: '/bot8579217430:AAEcglCDYIrH9nqb-aBuz5A9Q_HjuXKAGUQ/sendMessage',
+      httpModule: [Object],
+      agentClass: [Function: Agent],
+      agentOptions: [Object],
+      agent: [Agent],
+      _started: true,
+      href: 'https://api.telegram.org/bot8579217430:AAEcglCDYIrH9nqb-aBuz5A9Q_HjuXKAGUQ/sendMessage',
+      req: [ClientRequest],
+      ntick: true,
+      response: [Circular *1],
+      originalHost: 'api.telegram.org',
+      originalHostHeaderName: 'host',
+      responseContent: [Circular *1],
+      _destdata: true,
+      _ended: true,
+      _callbackCalled: true,
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false
+    },
+    toJSON: [Function: responseToJSON],
+    caseless: Caseless { dict: [Object] },
+    body: {
+      ok: false,
+      error_code: 400,
+      description: 'Bad Request: BUTTON_DATA_INVALID'
+    },
+    [Symbol(shapeMode)]: true,
+    [Symbol(kCapture)]: false,
+    [Symbol(kHeaders)]: {
+      server: 'nginx/1.18.0',
+      date: 'Sat, 22 Nov 2025 05:11:24 GMT',
+      'content-type': 'application/json',
+      'content-length': '78',
+      connection: 'keep-alive',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains; preload',
+      'access-control-allow-origin': '*',
+      'access-control-expose-headers': 'Content-Length,Content-Type,Date,Server,Connection'
+    },
+    [Symbol(kHeadersCount)]: 16,
+    [Symbol(kTrailers)]: null,
+    [Symbol(kTrailersCount)]: 0
+  }
+}
