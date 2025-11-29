@@ -143,17 +143,15 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
   } catch (error) {
     console.error('Error uploading:', error.message);
     
-    // For large files, send direct link
     await bot.editMessageText(
-      `📥 *File Ready for Download*\n\n📹 *${videoData.title || 'Media'}*\n\n━━━━━━━━━━━\n[📥 Download Here](${downloadUrl})`,
+      `❌ *Upload Failed*\n\nError: ${error.message}\n\nPlease try again.`,
       { 
         chat_id: chatId, 
         message_id: progressMsg.message_id,
-        parse_mode: 'Markdown',
-        disable_web_page_preview: true
+        parse_mode: 'Markdown'
       }
     ).catch(() => {});
-    return true;
+    return false;
   }
 };
 
