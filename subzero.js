@@ -30,42 +30,6 @@ const detectPlatform = (url) => {
   return null;
 };
 
-const extractVideoInfo = (url) => {
-  const youtube_patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
-    /youtube\.com\/embed\/([^&\n?#]+)/,
-    /youtube\.com\/v\/([^&\n?#]+)/
-  ];
-  
-  for (const pattern of youtube_patterns) {
-    const match = url.match(pattern);
-    if (match) return { id: match[1], url: `https://www.youtube.com/watch?v=${match[1]}` };
-  }
-  return { id: null, url: url };
-};
-
-const formatDuration = (seconds) => {
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-  
-  if (hrs > 0) return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-};
-
-const downloadFromAPI = async (url) => {
-  try {
-    const response = await axios.get(config.API_URL, {
-      params: { url: url },
-      timeout: 30000
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error downloading from API:', error.message);
-    return null;
-  }
-};
-
 const searchYouTube = async (query) => {
   try {
     const results = await YoutubeSearch.GetListByKeyword(query, false, 12);
@@ -98,9 +62,7 @@ const scheduleDelete = async (chatId, messageIds, timeout = config.AUTO_DELETE_T
     for (const msgId of messageIds) {
       try {
         await bot.deleteMessage(chatId, msgId);
-      } catch (error) {
-        // Message already deleted
-      }
+      } catch (error) {}
     }
   }, timeout);
 };
@@ -140,45 +102,31 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     
     const caption = `📹 *${videoData.title || 'Media Download'}*\n\n👨‍💻 *${config.BOT_NAME}*`;
     
-    if (type === 'audio' || type === 'mp3') {
-      // If it's MP4 video, convert to MP3 first
-      if (type === 'mp3') {
-        const tempDir = '/tmp';
-        const tempMp4 = path.join(tempDir, `temp_${Date.now()}.mp4`);
-        const tempMp3 = path.join(tempDir, `temp_${Date.now()}.mp3`);
-        
-        // Save stream to temporary MP4 file
-        const writeStream = fs.createWriteStream(tempMp4);
-        response.data.pipe(writeStream);
-        
-        await new Promise((resolve, reject) => {
-          writeStream.on('finish', resolve);
-          writeStream.on('error', reject);
-        });
-        
-        // Convert MP4 to MP3
-        await convertToMP3(tempMp4, tempMp3);
-        
-        // Send MP3
-        const mp3Stream = fs.createReadStream(tempMp3);
-        await bot.sendAudio(chatId, mp3Stream, {
-          caption,
-          parse_mode: 'Markdown',
-          title: videoData.title || 'Audio'
-        });
-        
-        // Cleanup temp files
-        fs.unlinkSync(tempMp4);
-        fs.unlinkSync(tempMp3);
-      } else {
-        await bot.sendAudio(chatId, response.data, {
-          caption,
-          parse_mode: 'Markdown',
-          title: videoData.title || 'Audio'
-        });
-      }
+    if (type === 'mp3') {
+      const tempDir = '/tmp';
+      const tempMp4 = path.join(tempDir, `temp_${Date.now()}.mp4`);
+      const tempMp3 = path.join(tempDir, `temp_${Date.now()}.mp3`);
+      
+      const writeStream = fs.createWriteStream(tempMp4);
+      response.data.pipe(writeStream);
+      
+      await new Promise((resolve, reject) => {
+        writeStream.on('finish', resolve);
+        writeStream.on('error', reject);
+      });
+      
+      await convertToMP3(tempMp4, tempMp3);
+      
+      const mp3Stream = fs.createReadStream(tempMp3);
+      await bot.sendAudio(chatId, mp3Stream, {
+        caption,
+        parse_mode: 'Markdown',
+        title: videoData.title || 'Audio'
+      });
+      
+      fs.unlinkSync(tempMp4);
+      fs.unlinkSync(tempMp3);
     } else {
-      // Send MP4 video
       await bot.sendVideo(chatId, response.data, {
         caption,
         parse_mode: 'Markdown',
@@ -190,7 +138,6 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     return true;
   } catch (error) {
     console.error('Error uploading:', error.message);
-    // Send direct download link as fallback
     await bot.editMessageText(
       `📥 *Direct Download Link*\n\n*${videoData.title || 'Media'}*\n\n[Download Here](${downloadUrl})`,
       { 
@@ -204,26 +151,70 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
   }
 };
 
-// Create quality keyboard with MP4 and MP3 options
-const createQualityKeyboard = (videoData, cacheId) => {
-  const keyboard = [];
-  
-  // MP3 Audio option (converted from MP4)
-  keyboard.push([{
-    text: '🎵 MP3 Audio',
-    callback_data: `mp3|${cacheId}`
-  }]);
-  
-  // MP4 Video options (high and low quality)
-  keyboard.push([
-    { text: '📹 MP4 High', callback_data: `mp4_high|${cacheId}` },
-    { text: '📹 MP4 Low', callback_data: `mp4_low|${cacheId}` }
-  ]);
-  
-  // Cancel button
-  keyboard.push([{ text: '❌ Cancel', callback_data: 'cancel' }]);
-  
-  return { inline_keyboard: keyboard };
+// YouTube API download
+const downloadFromYouTubeAPI = async (url) => {
+  try {
+    const response = await axios.get(config.YOUTUBE_API, {
+      params: { url: url },
+      timeout: 30000
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error downloading from YouTube API:', error.message);
+    return null;
+  }
+};
+
+// Social media API download
+const downloadFromSocialMediaAPI = async (url) => {
+  try {
+    const response = await axios.get(config.SOCIAL_MEDIA_API, {
+      params: { url: url },
+      timeout: 30000
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error downloading from Social Media API:', error.message);
+    return null;
+  }
+};
+
+// Create YouTube keyboard with multiple qualities + MP3
+const createYouTubeKeyboard = (cacheId) => {
+  return {
+    inline_keyboard: [
+      [{ text: '🎵 MP3 Audio', callback_data: `mp3|${cacheId}` }],
+      [
+        { text: '📹 1080p', callback_data: `yt_1080|${cacheId}` },
+        { text: '📹 720p', callback_data: `yt_720|${cacheId}` }
+      ],
+      [
+        { text: '📹 480p', callback_data: `yt_480|${cacheId}` },
+        { text: '📹 360p', callback_data: `yt_360|${cacheId}` }
+      ],
+      [
+        { text: '📹 240p', callback_data: `yt_240|${cacheId}` },
+        { text: '📹 144p', callback_data: `yt_144|${cacheId}` }
+      ],
+      [{ text: '❌ Cancel', callback_data: 'cancel' }]
+    ]
+  };
+};
+
+// Create Social Media keyboard with MP4 only
+const createSocialMediaKeyboard = (cacheId) => {
+  return {
+    inline_keyboard: [
+      [
+        { text: '🎵 MP3 Audio', callback_data: `mp3|${cacheId}` }
+      ],
+      [
+        { text: '📹 MP4 High', callback_data: `mp4_high|${cacheId}` },
+        { text: '📹 MP4 Low', callback_data: `mp4_low|${cacheId}` }
+      ],
+      [{ text: '❌ Cancel', callback_data: 'cancel' }]
+    ]
+  };
 };
 
 // Command Handlers
@@ -352,10 +343,10 @@ bot.on('message', async (msg) => {
     
     const platform = detectPlatform(text);
     
-    if (platform && platform !== 'youtube') {
-      await processMediaUrl(chatId, text, msg.message_id, platform);
-    } else if (platform === 'youtube') {
+    if (platform === 'youtube') {
       await processVideoUrl(chatId, text, msg.message_id);
+    } else if (platform) {
+      await processSocialMediaUrl(chatId, text, msg.message_id, platform);
     } else {
       await processSearch(chatId, text, msg.message_id);
     }
@@ -365,22 +356,17 @@ bot.on('message', async (msg) => {
   }
 });
 
-// Process social media URLs
-const processMediaUrl = async (chatId, url, originalMsgId, platform) => {
-  const loadingMsg = await bot.sendMessage(chatId, `⏳ Processing ${config.PLATFORMS[platform].name} video...`);
-  const loadingInterval = animateLoading(chatId, loadingMsg.message_id, 'Downloading');
+// YouTube URL processing with multiple qualities
+const processVideoUrl = async (chatId, url, originalMsgId) => {
+  const loadingMsg = await bot.sendMessage(chatId, '⏳ Fetching YouTube video...');
+  const loadingInterval = animateLoading(chatId, loadingMsg.message_id, 'Fetching');
   
-  const mediaData = await downloadFromAPI(url);
+  const videoData = await downloadFromYouTubeAPI(url);
   clearInterval(loadingInterval);
   
-  if (!mediaData || !mediaData.status || !mediaData.data) {
+  if (!videoData || !videoData.status) {
     await bot.editMessageText(
-      `❌ *Error!*
-
-Could not download from ${config.PLATFORMS[platform].name}. Please check:
-• The URL is correct
-• The content is public
-• The link is valid`,
+      `❌ *Error!*\n\nCould not fetch video. Check URL and privacy settings.`,
       {
         chat_id: chatId,
         message_id: loadingMsg.message_id,
@@ -393,38 +379,75 @@ Could not download from ${config.PLATFORMS[platform].name}. Please check:
   
   await bot.deleteMessage(chatId, loadingMsg.message_id);
   
-  const videoUrls = {
-    low: mediaData.data.low,
-    high: mediaData.data.high
-  };
+  const cacheId = `${chatId}_${Date.now()}`;
+  videoDataCache.set(cacheId, videoData);
+  
+  setTimeout(() => videoDataCache.delete(cacheId), 300000);
+  
+  const caption = `🎬 *${videoData.title || 'YouTube Video'}*\n\n✅ Choose quality:`;
+  
+  let selectionMsg;
+  if (videoData.thumbnail) {
+    try {
+      selectionMsg = await bot.sendPhoto(chatId, videoData.thumbnail, {
+        caption,
+        parse_mode: 'Markdown',
+        reply_markup: createYouTubeKeyboard(cacheId)
+      });
+    } catch (error) {
+      selectionMsg = await bot.sendMessage(chatId, caption, {
+        parse_mode: 'Markdown',
+        reply_markup: createYouTubeKeyboard(cacheId)
+      });
+    }
+  } else {
+    selectionMsg = await bot.sendMessage(chatId, caption, {
+      parse_mode: 'Markdown',
+      reply_markup: createYouTubeKeyboard(cacheId)
+    });
+  }
+  
+  userStates.set(chatId, {
+    messagesToDelete: [originalMsgId, selectionMsg.message_id]
+  });
+};
+
+// Social media (TikTok, Instagram, Facebook) processing
+const processSocialMediaUrl = async (chatId, url, originalMsgId, platform) => {
+  const loadingMsg = await bot.sendMessage(chatId, `⏳ Processing ${config.PLATFORMS[platform].name}...`);
+  const loadingInterval = animateLoading(chatId, loadingMsg.message_id, 'Downloading');
+  
+  const mediaData = await downloadFromSocialMediaAPI(url);
+  clearInterval(loadingInterval);
+  
+  if (!mediaData || !mediaData.status || !mediaData.data) {
+    await bot.editMessageText(
+      `❌ Error! Could not download from ${config.PLATFORMS[platform].name}.`,
+      {
+        chat_id: chatId,
+        message_id: loadingMsg.message_id,
+        parse_mode: 'Markdown'
+      }
+    );
+    scheduleDelete(chatId, [loadingMsg.message_id, originalMsgId], 10000);
+    return;
+  }
+  
+  await bot.deleteMessage(chatId, loadingMsg.message_id);
   
   const cacheId = `${chatId}_${Date.now()}`;
   videoDataCache.set(cacheId, {
     title: mediaData.data.title || `${config.PLATFORMS[platform].name} Video`,
     thumbnail: mediaData.data.thumbnail,
-    videos: videoUrls
+    videos: {
+      high: mediaData.data.high,
+      low: mediaData.data.low
+    }
   });
   
   setTimeout(() => videoDataCache.delete(cacheId), 300000);
   
-  const caption = `${config.PLATFORMS[platform].icon} *${mediaData.data.title || 'Media'}*
-
-✅ Video found! Choose your format:
-
-👨‍💻 *${config.BOT_NAME}*`;
-  
-  const keyboard = {
-    inline_keyboard: [
-      [
-        { text: `🎵 MP3 Audio`, callback_data: `mp3|${cacheId}` }
-      ],
-      [
-        { text: `📹 MP4 High`, callback_data: `mp4_high|${cacheId}` },
-        { text: `📹 MP4 Low`, callback_data: `mp4_low|${cacheId}` }
-      ],
-      [{ text: '❌ Cancel', callback_data: 'cancel' }]
-    ]
-  };
+  const caption = `${config.PLATFORMS[platform].icon} *${mediaData.data.title || 'Media'}*\n\n✅ Choose format:`;
   
   let selectionMsg;
   if (mediaData.data.thumbnail) {
@@ -432,18 +455,18 @@ Could not download from ${config.PLATFORMS[platform].name}. Please check:
       selectionMsg = await bot.sendPhoto(chatId, mediaData.data.thumbnail, {
         caption,
         parse_mode: 'Markdown',
-        reply_markup: keyboard
+        reply_markup: createSocialMediaKeyboard(cacheId)
       });
     } catch (error) {
       selectionMsg = await bot.sendMessage(chatId, caption, {
         parse_mode: 'Markdown',
-        reply_markup: keyboard
+        reply_markup: createSocialMediaKeyboard(cacheId)
       });
     }
   } else {
     selectionMsg = await bot.sendMessage(chatId, caption, {
       parse_mode: 'Markdown',
-      reply_markup: keyboard
+      reply_markup: createSocialMediaKeyboard(cacheId)
     });
   }
   
@@ -452,88 +475,7 @@ Could not download from ${config.PLATFORMS[platform].name}. Please check:
   });
 };
 
-// Process YouTube URL
-const processVideoUrl = async (chatId, url, originalMsgId) => {
-  const loadingMsg = await bot.sendMessage(chatId, '⏳ Fetching YouTube video...');
-  const loadingInterval = animateLoading(chatId, loadingMsg.message_id, 'Fetching');
-  
-  const mediaData = await downloadFromAPI(url);
-  clearInterval(loadingInterval);
-  
-  if (!mediaData || !mediaData.status || !mediaData.data) {
-    await bot.editMessageText(
-      `❌ *Error!*
-
-Could not fetch video information. Please check:
-• The URL is correct
-• The video is publicly available`,
-      {
-        chat_id: chatId,
-        message_id: loadingMsg.message_id,
-        parse_mode: 'Markdown'
-      }
-    );
-    scheduleDelete(chatId, [loadingMsg.message_id, originalMsgId], 10000);
-    return;
-  }
-  
-  await bot.deleteMessage(chatId, loadingMsg.message_id);
-  
-  const cacheId = `${chatId}_${Date.now()}`;
-  videoDataCache.set(cacheId, {
-    title: mediaData.data.title || 'YouTube Video',
-    thumbnail: mediaData.data.thumbnail,
-    videos: { high: mediaData.data.high, low: mediaData.data.low }
-  });
-  
-  setTimeout(() => videoDataCache.delete(cacheId), 300000);
-  
-  const caption = `🎬 *${mediaData.data.title || 'Video'}*
-
-✅ Video found! Choose your format:
-
-👨‍💻 *${config.BOT_NAME}*`;
-  
-  const keyboard = {
-    inline_keyboard: [
-      [
-        { text: `🎵 MP3 Audio`, callback_data: `mp3|${cacheId}` }
-      ],
-      [
-        { text: `📹 MP4 High`, callback_data: `mp4_high|${cacheId}` },
-        { text: `📹 MP4 Low`, callback_data: `mp4_low|${cacheId}` }
-      ],
-      [{ text: '❌ Cancel', callback_data: 'cancel' }]
-    ]
-  };
-  
-  let selectionMsg;
-  if (mediaData.data.thumbnail) {
-    try {
-      selectionMsg = await bot.sendPhoto(chatId, mediaData.data.thumbnail, {
-        caption,
-        parse_mode: 'Markdown',
-        reply_markup: keyboard
-      });
-    } catch (error) {
-      selectionMsg = await bot.sendMessage(chatId, caption, {
-        parse_mode: 'Markdown',
-        reply_markup: keyboard
-      });
-    }
-  } else {
-    selectionMsg = await bot.sendMessage(chatId, caption, {
-      parse_mode: 'Markdown',
-      reply_markup: keyboard
-    });
-  }
-  
-  userStates.set(chatId, {
-    messagesToDelete: [originalMsgId, selectionMsg.message_id]
-  });
-};
-
-// Process YouTube search
+// YouTube search
 const processSearch = async (chatId, query, originalMsgId) => {
   const loadingMsg = await bot.sendMessage(chatId, '⏳ Searching YouTube...');
   const loadingInterval = animateLoading(chatId, loadingMsg.message_id, 'Searching');
@@ -542,27 +484,18 @@ const processSearch = async (chatId, query, originalMsgId) => {
   clearInterval(loadingInterval);
   
   if (!results || results.length === 0) {
-    await bot.editMessageText(
-      '❌ No results found. Try a different search query.',
-      { chat_id: chatId, message_id: loadingMsg.message_id }
-    );
+    await bot.editMessageText('❌ No results found.', { chat_id: chatId, message_id: loadingMsg.message_id });
     scheduleDelete(chatId, [loadingMsg.message_id, originalMsgId], 10000);
     return;
   }
   
   await bot.deleteMessage(chatId, loadingMsg.message_id);
   
-  let resultText = `🔍 *Search Results*\n`;
-  resultText += `━━━━━━━━━━━━━━━━━━━\n`;
-  resultText += `Query: _"${query}"_\n\n`;
-  
+  let resultText = `🔍 *Search Results*\n━━━━━━━━━━━━━━\n`;
   results.slice(0, 10).forEach((video, index) => {
-    const duration = video.length?.simpleText || '⏱️ Live';
     resultText += `*${index + 1}.* ${video.title}\n`;
   });
-  
-  resultText += `\n━━━━━━━━━━━━━━━━━━━\n`;
-  resultText += `💬 Reply with number (1-${Math.min(results.length, 10)})`;
+  resultText += `\n💬 Reply with number (1-${Math.min(results.length, 10)})`;
   
   let searchMsg;
   const thumbnail = results[0]?.thumbnail?.thumbnails?.[0]?.url;
@@ -574,14 +507,10 @@ const processSearch = async (chatId, query, originalMsgId) => {
         parse_mode: 'Markdown'
       });
     } catch (error) {
-      searchMsg = await bot.sendMessage(chatId, resultText, {
-        parse_mode: 'Markdown'
-      });
+      searchMsg = await bot.sendMessage(chatId, resultText, { parse_mode: 'Markdown' });
     }
   } else {
-    searchMsg = await bot.sendMessage(chatId, resultText, {
-      parse_mode: 'Markdown'
-    });
+    searchMsg = await bot.sendMessage(chatId, resultText, { parse_mode: 'Markdown' });
   }
   
   userStates.set(chatId, {
@@ -602,7 +531,7 @@ bot.on('callback_query', async (query) => {
     await bot.answerCallbackQuery(query.id);
     
     if (data === 'cancel') {
-      await bot.editMessageText('❌ Download cancelled.', {
+      await bot.editMessageText('❌ Cancelled.', {
         chat_id: chatId,
         message_id: query.message.message_id
       });
@@ -622,7 +551,7 @@ bot.on('callback_query', async (query) => {
     const mediaData = videoDataCache.get(cacheId);
     if (!mediaData) {
       await bot.answerCallbackQuery(query.id, {
-        text: '❌ Session expired. Please send the link again.',
+        text: '❌ Session expired.',
         show_alert: true
       });
       return;
@@ -631,7 +560,7 @@ bot.on('callback_query', async (query) => {
     let downloadUrl, type;
     
     if (downloadType === 'mp3') {
-      downloadUrl = mediaData.videos.high || mediaData.videos.low;
+      downloadUrl = mediaData.videos?.high || mediaData.audio || mediaData[Object.keys(mediaData)[0]];
       type = 'mp3';
     } else if (downloadType === 'mp4_high') {
       downloadUrl = mediaData.videos.high;
@@ -639,13 +568,15 @@ bot.on('callback_query', async (query) => {
     } else if (downloadType === 'mp4_low') {
       downloadUrl = mediaData.videos.low;
       type = 'video';
+    } else if (downloadType.startsWith('yt_')) {
+      const quality = downloadType.split('_')[1];
+      downloadUrl = mediaData.videos?.[quality] || mediaData[quality];
+      type = 'video';
     }
     
     try {
       await bot.deleteMessage(chatId, query.message.message_id);
-    } catch (error) {
-      console.error('Error deleting message:', error.message);
-    }
+    } catch (error) {}
     
     await sendMediaToTelegram(chatId, downloadUrl, type, mediaData);
     
@@ -657,7 +588,7 @@ bot.on('callback_query', async (query) => {
   } catch (error) {
     console.error('Error in callback:', error);
     await bot.answerCallbackQuery(query.id, {
-      text: '❌ An error occurred. Please try again.',
+      text: '❌ Error occurred.',
       show_alert: true
     });
   }
