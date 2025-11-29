@@ -41,7 +41,7 @@ module.exports = {
     facebook: {
       name: "Facebook",
       icon: "👍",
-      regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/\S+\/video\S*/i,
+      regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/(share\/v\/|watch\/|video\/|reel\/|[\w-]+\/video)[\w/?=&\-._~:@!$'()*+,;%]+/i,
     },
     tiktok: {
       name: "TikTok",
