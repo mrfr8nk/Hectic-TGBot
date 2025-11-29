@@ -8,6 +8,11 @@ module.exports = {
   // API Configuration
   YOUTUBE_API: "https://yt-dl.officialhectormanuel.workers.dev/",
   SOCIAL_MEDIA_API: "https://dev-priyanshi.onrender.com/api/alldl",
+  
+  // Local Telegram Bot API Server (for 2GB file uploads)
+  // Set this to your Render deployment URL when ready
+  // Format: https://your-telegram-api-server.onrender.com
+  TELEGRAM_BOT_API_SERVER: process.env.TELEGRAM_BOT_API_SERVER || null,
 
   // Bot Info
   CREATOR: "Darrell Mucheri (Mr Frank)",

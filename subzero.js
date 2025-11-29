@@ -9,7 +9,14 @@ const config = require('./config');
 
 ffmpeg.setFfmpegPath(ffmpegStatic);
 
-const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
+// Initialize bot with local API server if configured
+const botOptions = { polling: true };
+if (config.TELEGRAM_BOT_API_SERVER) {
+  botOptions.apiURL = `${config.TELEGRAM_BOT_API_SERVER}/bot{0}/{1}`;
+  console.log('🌐 Using Local Telegram Bot API Server:', config.TELEGRAM_BOT_API_SERVER);
+}
+
+const bot = new TelegramBot(config.BOT_TOKEN, botOptions);
 
 const userStates = new Map();
 const videoDataCache = new Map();

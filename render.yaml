@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: telegram-bot-api-server
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    port: 8081
+    envVars:
+      - key: TELEGRAM_API_ID
+        sync: false
+      - key: TELEGRAM_API_HASH
+        sync: false
+    healthCheckPath: /
+    autoDeploy: true
