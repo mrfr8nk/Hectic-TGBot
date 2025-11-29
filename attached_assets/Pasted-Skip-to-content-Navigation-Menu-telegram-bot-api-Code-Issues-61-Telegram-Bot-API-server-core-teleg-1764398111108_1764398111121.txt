@@ -1,0 +1,164 @@
+Skip to content
+Navigation Menu
+telegram-bot-api
+
+Code
+Issues
+61
+Telegram Bot API server
+
+core.telegram.org/bots
+License
+ BSL-1.0 license
+ 3.9k stars
+ 747 forks
+ 137 watching
+ 1 Branch
+ 0 Tags
+ Activity
+ Custom properties
+Public repository
+tdlib/telegram-bot-api
+Name	
+levlam
+levlam
+3 months ago
+td @ a986345
+4 months ago
+telegram-bot-api
+3 months ago
+.clang-format
+2 years ago
+.gitattributes
+5 years ago
+.gitignore
+5 years ago
+.gitmodules
+5 years ago
+CMakeLists.txt
+3 months ago
+LICENSE_1_0.txt
+5 years ago
+README.md
+7 months ago
+build.html
+9 months ago
+Repository files navigation
+README
+BSL-1.0 license
+Telegram Bot API
+The Telegram Bot API provides an HTTP API for creating Telegram Bots.
+
+If you've got any questions about bots or would like to report an issue with your bot, kindly contact us at @BotSupport in Telegram.
+
+Please note that only global Bot API issues that affect all bots are suitable for this repository.
+
+Table of Contents
+Installation
+Dependencies
+Usage
+Documentation
+Moving a bot to a local server
+Moving a bot from one local server to another
+License
+
+Installation
+The simplest way to build and install Telegram Bot API server is to use our Telegram Bot API server build instructions generator. If you do that, you'll only need to choose the target operating system to receive the complete build instructions.
+
+In general, you need to install all Telegram Bot API server dependencies and compile the source code using CMake:
+
+git clone --recursive https://github.com/tdlib/telegram-bot-api.git
+cd telegram-bot-api
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build . --target install
+
+Dependencies
+To build and run Telegram Bot API server you will need:
+
+OpenSSL
+zlib
+C++17 compatible compiler (e.g., Clang 5.0+, GCC 7.0+, MSVC 19.1+ (Visual Studio 2017.7+), Intel C++ Compiler 19+) (build only)
+gperf (build only)
+CMake (3.10+, build only)
+
+Usage
+Use telegram-bot-api --help to receive the list of all available options of the Telegram Bot API server.
+
+The only mandatory options are --api-id and --api-hash. You must obtain your own api_id and api_hash as described in https://core.telegram.org/api/obtaining_api_id and specify them using the --api-id and --api-hash options or the TELEGRAM_API_ID and TELEGRAM_API_HASH environment variables.
+
+To enable Bot API features not available at https://api.telegram.org, specify the option --local. In the local mode the Bot API server allows to:
+
+Download files without a size limit.
+Upload files up to 2000 MB.
+Upload files using their local path and the file URI scheme.
+Use an HTTP URL for the webhook.
+Use any local IP address for the webhook.
+Use any port for the webhook.
+Set max_webhook_connections up to 100000.
+Receive the absolute local path as a value of the file_path field without the need to download the file after a getFile request.
+The Telegram Bot API server accepts only HTTP requests, so a TLS termination proxy needs to be used to handle remote HTTPS requests.
+
+By default the Telegram Bot API server is launched on the port 8081, which can be changed using the option --http-port.
+
+
+Documentation
+See Bots: An introduction for developers for a brief description of Telegram Bots and their features.
+
+See the Telegram Bot API documentation for a description of the Bot API interface and a complete list of available classes, methods and updates.
+
+See the Telegram Bot API server build instructions generator for detailed instructions on how to build the Telegram Bot API server.
+
+Subscribe to @BotNews to be the first to know about the latest updates and join the discussion in @BotTalk.
+
+
+Moving a bot to a local server
+To guarantee that your bot will receive all updates, you must deregister it with the https://api.telegram.org server by calling the method logOut. After the bot is logged out, you can replace the address to which the bot sends requests with the address of your local server and use it in the usual way. If the server is launched in --local mode, make sure that the bot can correctly handle absolute file paths in response to getFile requests.
+
+
+Moving a bot from one local server to another
+If the bot is logged in on more than one server simultaneously, there is no guarantee that it will receive all updates. To move a bot from one local server to another you can use the method logOut to log out on the old server before switching to the new one.
+
+If you want to avoid losing updates between logging out on the old server and launching on the new server, you can remove the bot's webhook using the method deleteWebhook, then use the method close to close the bot instance. After the instance is closed, locate the bot's subdirectory in the working directory of the old server by the bot's user ID, move the subdirectory to the working directory of the new server and continue sending requests to the new server as usual.
+
+
+License
+Telegram Bot API server source code is licensed under the terms of the Boost Software License. See LICENSE_1_0.txt for more information.
+
+Contributors
+9
+@levlam
+@Mammad900
+@KnorpelSenf
+@Alexell
+@demget
+@harshil21
+@KunoiSayami
+@AYMENJD
+@serjan-nasredin
+Deployments
+83
+ github-pages 3 months ago
++ 82 deployments
+Languages
+C++
+97.1%
+ 
+HTML
+2.6%
+ 
+CMake
+0.3%
+Footer
+© 2025 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Community
+Docs
+Contact
+Manage cookies
+Do not share my personal information

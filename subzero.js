@@ -81,18 +81,20 @@ const convertToMP3 = (inputPath, outputPath) => {
 };
 
 const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
-  const progressMsg = await bot.sendMessage(chatId, `📥 *Processing...*\n\n${videoData.title || 'Media'}`, {
+  const progressMsg = await bot.sendMessage(chatId, `📥 *Preparing download...*\n\n${videoData.title || 'Media'}`, {
     parse_mode: 'Markdown'
   });
   
   try {
     const response = await axios.get(downloadUrl, {
       responseType: 'stream',
-      timeout: 300000
+      timeout: 600000,
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity
     });
     
     await bot.editMessageText(
-      `⬆️ *Uploading...*\n\n${videoData.title || 'Media'}`,
+      `⬆️ *Uploading to Telegram...*\n\n${videoData.title || 'Media'}\n\n(Large files may take time)`,
       {
         chat_id: chatId,
         message_id: progressMsg.message_id,
@@ -124,8 +126,10 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
         title: videoData.title || 'Audio'
       });
       
-      fs.unlinkSync(tempMp4);
-      fs.unlinkSync(tempMp3);
+      try {
+        fs.unlinkSync(tempMp4);
+        fs.unlinkSync(tempMp3);
+      } catch (e) {}
     } else {
       await bot.sendVideo(chatId, response.data, {
         caption,
@@ -138,8 +142,10 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     return true;
   } catch (error) {
     console.error('Error uploading:', error.message);
+    
+    // For large files, send direct link
     await bot.editMessageText(
-      `📥 *Direct Download Link*\n\n*${videoData.title || 'Media'}*\n\n[Download Here](${downloadUrl})`,
+      `📥 *File Ready for Download*\n\n📹 *${videoData.title || 'Media'}*\n\n━━━━━━━━━━━\n[📥 Download Here](${downloadUrl})`,
       { 
         chat_id: chatId, 
         message_id: progressMsg.message_id,
@@ -384,7 +390,13 @@ const processVideoUrl = async (chatId, url, originalMsgId) => {
   
   setTimeout(() => videoDataCache.delete(cacheId), 300000);
   
-  const caption = `🎬 *${videoData.title || 'YouTube Video'}*\n\n✅ Choose quality:`;
+  const caption = `🎬 *YouTube Video*
+
+📹 *${videoData.title || 'Video'}*
+
+━━━━━━━━━━━━━━
+✨ Select Quality:
+━━━━━━━━━━━━━━`;
   
   let selectionMsg;
   if (videoData.thumbnail) {
@@ -447,7 +459,13 @@ const processSocialMediaUrl = async (chatId, url, originalMsgId, platform) => {
   
   setTimeout(() => videoDataCache.delete(cacheId), 300000);
   
-  const caption = `${config.PLATFORMS[platform].icon} *${mediaData.data.title || 'Media'}*\n\n✅ Choose format:`;
+  const caption = `${config.PLATFORMS[platform].icon} *${config.PLATFORMS[platform].name}*
+
+📹 *${mediaData.data.title || 'Video'}*
+
+━━━━━━━━━━━━━━
+✨ Select Format:
+━━━━━━━━━━━━━━`;
   
   let selectionMsg;
   if (mediaData.data.thumbnail) {
