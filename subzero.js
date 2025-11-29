@@ -1,7 +1,13 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 const YoutubeSearch = require('youtube-search-api');
+const ffmpeg = require('fluent-ffmpeg');
+const ffmpegStatic = require('ffmpeg-static');
+const fs = require('fs');
+const path = require('path');
 const config = require('./config');
+
+ffmpeg.setFfmpegPath(ffmpegStatic);
 
 const bot = new TelegramBot(config.BOT_TOKEN, { polling: true });
 
@@ -15,7 +21,6 @@ const trackUser = (userId) => {
   userList.add(userId);
 };
 
-// Detect platform from URL
 const detectPlatform = (url) => {
   for (const [platform, data] of Object.entries(config.PLATFORMS)) {
     if (data.regex.test(url)) {
@@ -25,7 +30,6 @@ const detectPlatform = (url) => {
   return null;
 };
 
-// Extract video ID or get URL info
 const extractVideoInfo = (url) => {
   const youtube_patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
@@ -49,7 +53,6 @@ const formatDuration = (seconds) => {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
-// Download from API
 const downloadFromAPI = async (url) => {
   try {
     const response = await axios.get(config.API_URL, {
@@ -63,7 +66,6 @@ const downloadFromAPI = async (url) => {
   }
 };
 
-// Search YouTube
 const searchYouTube = async (query) => {
   try {
     const results = await YoutubeSearch.GetListByKeyword(query, false, 12);
@@ -103,16 +105,28 @@ const scheduleDelete = async (chatId, messageIds, timeout = config.AUTO_DELETE_T
   }, timeout);
 };
 
+// Convert MP4 to MP3
+const convertToMP3 = (inputPath, outputPath) => {
+  return new Promise((resolve, reject) => {
+    ffmpeg(inputPath)
+      .toFormat('mp3')
+      .audioCodec('libmp3lame')
+      .audioBitrate('192k')
+      .on('error', (err) => reject(err))
+      .on('end', () => resolve(outputPath))
+      .save(outputPath);
+  });
+};
+
 const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
   const progressMsg = await bot.sendMessage(chatId, `📥 *Processing...*\n\n${videoData.title || 'Media'}`, {
     parse_mode: 'Markdown'
   });
   
   try {
-    // Attempt direct upload to Telegram (no file size limits enforced by bot)
     const response = await axios.get(downloadUrl, {
       responseType: 'stream',
-      timeout: 300000 // Extended timeout for large files
+      timeout: 300000
     });
     
     await bot.editMessageText(
@@ -126,13 +140,45 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     
     const caption = `📹 *${videoData.title || 'Media Download'}*\n\n👨‍💻 *${config.BOT_NAME}*`;
     
-    if (type === 'audio') {
-      await bot.sendAudio(chatId, response.data, {
-        caption,
-        parse_mode: 'Markdown',
-        title: videoData.title || 'Audio'
-      });
+    if (type === 'audio' || type === 'mp3') {
+      // If it's MP4 video, convert to MP3 first
+      if (type === 'mp3') {
+        const tempDir = '/tmp';
+        const tempMp4 = path.join(tempDir, `temp_${Date.now()}.mp4`);
+        const tempMp3 = path.join(tempDir, `temp_${Date.now()}.mp3`);
+        
+        // Save stream to temporary MP4 file
+        const writeStream = fs.createWriteStream(tempMp4);
+        response.data.pipe(writeStream);
+        
+        await new Promise((resolve, reject) => {
+          writeStream.on('finish', resolve);
+          writeStream.on('error', reject);
+        });
+        
+        // Convert MP4 to MP3
+        await convertToMP3(tempMp4, tempMp3);
+        
+        // Send MP3
+        const mp3Stream = fs.createReadStream(tempMp3);
+        await bot.sendAudio(chatId, mp3Stream, {
+          caption,
+          parse_mode: 'Markdown',
+          title: videoData.title || 'Audio'
+        });
+        
+        // Cleanup temp files
+        fs.unlinkSync(tempMp4);
+        fs.unlinkSync(tempMp3);
+      } else {
+        await bot.sendAudio(chatId, response.data, {
+          caption,
+          parse_mode: 'Markdown',
+          title: videoData.title || 'Audio'
+        });
+      }
     } else {
+      // Send MP4 video
       await bot.sendVideo(chatId, response.data, {
         caption,
         parse_mode: 'Markdown',
@@ -144,7 +190,7 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     return true;
   } catch (error) {
     console.error('Error uploading:', error.message);
-    // Send direct download link as fallback (no size limit)
+    // Send direct download link as fallback
     await bot.editMessageText(
       `📥 *Direct Download Link*\n\n*${videoData.title || 'Media'}*\n\n[Download Here](${downloadUrl})`,
       { 
@@ -156,6 +202,28 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     ).catch(() => {});
     return true;
   }
+};
+
+// Create quality keyboard with MP4 and MP3 options
+const createQualityKeyboard = (videoData, cacheId) => {
+  const keyboard = [];
+  
+  // MP3 Audio option (converted from MP4)
+  keyboard.push([{
+    text: '🎵 MP3 Audio',
+    callback_data: `mp3|${cacheId}`
+  }]);
+  
+  // MP4 Video options (high and low quality)
+  keyboard.push([
+    { text: '📹 MP4 High', callback_data: `mp4_high|${cacheId}` },
+    { text: '📹 MP4 Low', callback_data: `mp4_low|${cacheId}` }
+  ]);
+  
+  // Cancel button
+  keyboard.push([{ text: '❌ Cancel', callback_data: 'cancel' }]);
+  
+  return { inline_keyboard: keyboard };
 };
 
 // Command Handlers
@@ -189,8 +257,9 @@ bot.onText(/\/developer/, async (msg) => {
 
 *Developer:* ${config.DEVELOPER.name}
 
-📱 *Facebook:* ${config.DEVELOPER.facebook}
-💬 *Telegram:* @${config.DEVELOPER.telegram}
+📱 *Telegram:* ${config.DEVELOPER.telegram}
+💻 *GitHub:* ${config.DEVELOPER.github}
+📞 *WhatsApp:* ${config.DEVELOPER.whatsapp}
 
 Feel free to reach out for support or feedback!`;
 
@@ -281,17 +350,13 @@ bot.on('message', async (msg) => {
       return;
     }
     
-    // Detect platform
     const platform = detectPlatform(text);
     
     if (platform && platform !== 'youtube') {
-      // Instagram, Facebook, TikTok
       await processMediaUrl(chatId, text, msg.message_id, platform);
     } else if (platform === 'youtube') {
-      // YouTube URL
       await processVideoUrl(chatId, text, msg.message_id);
     } else {
-      // Treat as YouTube search
       await processSearch(chatId, text, msg.message_id);
     }
   } catch (error) {
@@ -328,7 +393,6 @@ Could not download from ${config.PLATFORMS[platform].name}. Please check:
   
   await bot.deleteMessage(chatId, loadingMsg.message_id);
   
-  // Extract media URLs
   const videoUrls = {
     low: mediaData.data.low,
     high: mediaData.data.high
@@ -345,15 +409,18 @@ Could not download from ${config.PLATFORMS[platform].name}. Please check:
   
   const caption = `${config.PLATFORMS[platform].icon} *${mediaData.data.title || 'Media'}*
 
-✅ Video found! Choose your preferred quality:
+✅ Video found! Choose your format:
 
 👨‍💻 *${config.BOT_NAME}*`;
   
   const keyboard = {
     inline_keyboard: [
       [
-        { text: `📹 Low Quality`, callback_data: `video|low|${cacheId}` },
-        { text: `📹 High Quality`, callback_data: `video|high|${cacheId}` }
+        { text: `🎵 MP3 Audio`, callback_data: `mp3|${cacheId}` }
+      ],
+      [
+        { text: `📹 MP4 High`, callback_data: `mp4_high|${cacheId}` },
+        { text: `📹 MP4 Low`, callback_data: `mp4_low|${cacheId}` }
       ],
       [{ text: '❌ Cancel', callback_data: 'cancel' }]
     ]
@@ -423,15 +490,18 @@ Could not fetch video information. Please check:
   
   const caption = `🎬 *${mediaData.data.title || 'Video'}*
 
-✅ Video found! Choose your preferred quality:
+✅ Video found! Choose your format:
 
 👨‍💻 *${config.BOT_NAME}*`;
   
   const keyboard = {
     inline_keyboard: [
       [
-        { text: `📹 Low Quality`, callback_data: `video|low|${cacheId}` },
-        { text: `📹 High Quality`, callback_data: `video|high|${cacheId}` }
+        { text: `🎵 MP3 Audio`, callback_data: `mp3|${cacheId}` }
+      ],
+      [
+        { text: `📹 MP4 High`, callback_data: `mp4_high|${cacheId}` },
+        { text: `📹 MP4 Low`, callback_data: `mp4_low|${cacheId}` }
       ],
       [{ text: '❌ Cancel', callback_data: 'cancel' }]
     ]
@@ -547,8 +617,7 @@ bot.on('callback_query', async (query) => {
     
     const parts = data.split('|');
     const downloadType = parts[0];
-    const quality = parts[1];
-    const cacheId = parts[2];
+    const cacheId = parts[1];
     
     const mediaData = videoDataCache.get(cacheId);
     if (!mediaData) {
@@ -559,7 +628,18 @@ bot.on('callback_query', async (query) => {
       return;
     }
     
-    const downloadUrl = mediaData.videos[quality];
+    let downloadUrl, type;
+    
+    if (downloadType === 'mp3') {
+      downloadUrl = mediaData.videos.high || mediaData.videos.low;
+      type = 'mp3';
+    } else if (downloadType === 'mp4_high') {
+      downloadUrl = mediaData.videos.high;
+      type = 'video';
+    } else if (downloadType === 'mp4_low') {
+      downloadUrl = mediaData.videos.low;
+      type = 'video';
+    }
     
     try {
       await bot.deleteMessage(chatId, query.message.message_id);
@@ -567,7 +647,7 @@ bot.on('callback_query', async (query) => {
       console.error('Error deleting message:', error.message);
     }
     
-    await sendMediaToTelegram(chatId, downloadUrl, 'video', mediaData);
+    await sendMediaToTelegram(chatId, downloadUrl, type, mediaData);
     
     const userState = userStates.get(chatId);
     if (userState && userState.messagesToDelete) {
@@ -587,6 +667,6 @@ bot.on('polling_error', (error) => {
   console.error('Polling error:', error.message);
 });
 
-console.log('🚀 𝙋𝙧𝙤 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 𝘽𝙤𝙩 is running...');
+console.log('🚀 𝙃𝙚𝙘𝙩𝙞𝙘 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 𝘽𝙮 𝙈𝙧 𝙁𝙧𝙖𝙣𝙠 is running...');
 console.log('👨‍💻 Created by:', config.CREATOR);
 console.log('📊 Bot started at:', new Date().toLocaleString());

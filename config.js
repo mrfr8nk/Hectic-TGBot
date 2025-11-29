@@ -6,7 +6,7 @@ module.exports = {
     process.env.BOT_TOKEN || "7755445668:AAFlXqHZCiIH4bDFvuvEMvZFcP2K7C1H6Ac",
 
   // API Configuration
-  API_URL: "https://dev-priyanshi.onrender.com/api/alldl",
+  API_URL: "https://yt-dl.officialhectormanuel.workers.dev/",
 
   // Bot Info
   CREATOR: "Darrell Mucheri (Mr Frank)",
