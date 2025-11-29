@@ -1,46 +1,65 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   // Bot Configuration
-  BOT_TOKEN: process.env.BOT_TOKEN || 'your_telegram_bot_token_here',
-  
+  BOT_TOKEN:
+    process.env.BOT_TOKEN || "7755445668:AAFlXqHZCiIH4bDFvuvEMvZFcP2K7C1H6Ac",
+
   // API Configuration
-  API_URL: 'https://dev-priyanshi.onrender.com/api/alldl',
-  
+  API_URL: "https://dev-priyanshi.onrender.com/api/alldl",
+
   // Bot Info
-  CREATOR: 'Priyanshi Kaur',
-  BOT_NAME: '𝙋𝙧𝙤 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 𝘽𝙤𝙩',
-  
+  CREATOR: "Darrell Mucheri (Mr Frank)",
+  BOT_NAME: "𝙃𝙚𝙘𝙩𝙞𝙘 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 𝘽𝙮 𝙈𝙧 𝙁𝙧𝙖𝙣𝙠",
+
   // Developer Info
   DEVELOPER: {
-    name: 'Priyanshi Kaur',
-    facebook: 'https://www.facebook.com/PriyanshiKaurJi',
-    telegram: 'PriyanshiKaur'
+    name: "Mr Frank",
+    telegram: "t.me/mrfrankofc",
+    github: "github.com/mrfr8nk",
+    whatsapp: "+263719647303",
   },
-  
+
   // Start Menu Image
-  START_IMAGE: 'https://i.postimg.cc/CLsvy8vL/Nayan-Not-Available.jpg',
-  
+  START_IMAGE: "https://dabby.vercel.app/hect.jpg",
+
   // Features
   AUTO_DELETE_TIMEOUT: 60000,
-  
+
   // Loading Animation
-  LOADING_FRAMES: ['⏳', '⌛', '⏳', '⌛'],
-  
+  LOADING_FRAMES: ["⏳", "⌛", "⏳", "⌛"],
+
   // Supported Platforms
   PLATFORMS: {
-    instagram: { name: 'Instagram', icon: '📸', regex: /(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:p|reel|stories)\/[\w-]+/i },
-    facebook: { name: 'Facebook', icon: '👍', regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/\S+\/video\S*/i },
-    tiktok: { name: 'TikTok', icon: '🎵', regex: /(?:https?:\/\/)?(?:www\.)?(?:vm\.)?tiktok\.com\/[\w@]+/i },
-    youtube: { name: 'YouTube', icon: '🎬', regex: /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/\S+/i }
+    instagram: {
+      name: "Instagram",
+      icon: "📸",
+      regex:
+        /(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:p|reel|stories)\/[\w-]+/i,
+    },
+    facebook: {
+      name: "Facebook",
+      icon: "👍",
+      regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/\S+\/video\S*/i,
+    },
+    tiktok: {
+      name: "TikTok",
+      icon: "🎵",
+      regex: /(?:https?:\/\/)?(?:www\.)?(?:vm\.)?tiktok\.com\/[\w@]+/i,
+    },
+    youtube: {
+      name: "YouTube",
+      icon: "🎬",
+      regex: /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/\S+/i,
+    },
   },
-  
+
   // Messages
   WELCOME_MESSAGE: `╭════════════════⟢
-│  🎬 𝙋𝙧𝙖𝙣 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 🎬  
+│  🎬 𝙃𝙚𝙘𝙩𝙞𝙘 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 🎬  
 ╰════════════════⟢
 
-🌟 *Welcome to the Pro Downloader Bot!*
+🌟 *Welcome to Hectic Downloader Pro!*
 
 📥 *How to use:*
 ━━━━━━━━━━━━━━━━━━━━
@@ -68,7 +87,7 @@ module.exports = {
 /uptime - Bot uptime status
 /system - System information
 
-\`\`\`𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝙱𝙮 𝙋𝙞𝙖𝙮𝙖𝙣𝙨𝙝𝙞 𝙆𝙖𝙪𝙧\`\`\`
+\`\`\`𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝘽𝙮 𝙈𝙧 𝙁𝙧𝙖𝙣𝙠\`\`\`
 
 Send me a link to get started! 🚀`,
 
@@ -100,5 +119,5 @@ Send me a link to get started! 🚀`,
 
 ⚠️ *Note:* Messages auto-delete after 60 seconds!
 
-👨‍💻 *Created by:* 𝙿𝚛𝚒𝚢𝚊𝚗𝚜𝚑𝚒 𝙺𝚊𝚞𝚛`
+👨‍💻 *Created by:* 𝙼𝚛 𝙵𝚛𝚊𝚗𝚔`,
 };
