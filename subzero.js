@@ -104,35 +104,19 @@ const scheduleDelete = async (chatId, messageIds, timeout = config.AUTO_DELETE_T
 };
 
 const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
-  const progressMsg = await bot.sendMessage(chatId, `📥 *Downloading...*\n\n${videoData.title || 'Media'}\n\n⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜ 0%`, {
+  const progressMsg = await bot.sendMessage(chatId, `📥 *Processing...*\n\n${videoData.title || 'Media'}`, {
     parse_mode: 'Markdown'
   });
   
   try {
+    // Attempt direct upload to Telegram (no file size limits enforced by bot)
     const response = await axios.get(downloadUrl, {
       responseType: 'stream',
-      timeout: 120000,
-      onDownloadProgress: (progressEvent) => {
-        if (progressEvent.total) {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          const filledBlocks = Math.floor(percentCompleted / 10);
-          const emptyBlocks = 10 - filledBlocks;
-          const progressBar = '🟦'.repeat(filledBlocks) + '⬜'.repeat(emptyBlocks);
-          
-          bot.editMessageText(
-            `📥 *Downloading...*\n\n${videoData.title || 'Media'}\n\n${progressBar} ${percentCompleted}%`,
-            {
-              chat_id: chatId,
-              message_id: progressMsg.message_id,
-              parse_mode: 'Markdown'
-            }
-          ).catch(() => {});
-        }
-      }
+      timeout: 300000 // Extended timeout for large files
     });
     
     await bot.editMessageText(
-      `⬆️ *Uploading to Telegram...*\n\n${videoData.title || 'Media'}\n\n🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦 100%`,
+      `⬆️ *Uploading...*\n\n${videoData.title || 'Media'}`,
       {
         chat_id: chatId,
         message_id: progressMsg.message_id,
@@ -159,13 +143,18 @@ const sendMediaToTelegram = async (chatId, downloadUrl, type, videoData) => {
     await bot.deleteMessage(chatId, progressMsg.message_id);
     return true;
   } catch (error) {
-    console.error('Error uploading to Telegram:', error.message);
+    console.error('Error uploading:', error.message);
+    // Send direct download link as fallback (no size limit)
     await bot.editMessageText(
-      '❌ File too large for Telegram or upload failed.',
-      { chat_id: chatId, message_id: progressMsg.message_id }
-    );
-    setTimeout(() => bot.deleteMessage(chatId, progressMsg.message_id).catch(() => {}), 5000);
-    return false;
+      `📥 *Direct Download Link*\n\n*${videoData.title || 'Media'}*\n\n[Download Here](${downloadUrl})`,
+      { 
+        chat_id: chatId, 
+        message_id: progressMsg.message_id,
+        parse_mode: 'Markdown',
+        disable_web_page_preview: true
+      }
+    ).catch(() => {});
+    return true;
   }
 };
 
