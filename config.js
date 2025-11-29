@@ -5,63 +5,72 @@ module.exports = {
   BOT_TOKEN: process.env.BOT_TOKEN || 'your_telegram_bot_token_here',
   
   // API Configuration
-  API_URL: 'https://yt-dl.officialhectormanuel.workers.dev/',
+  API_URL: 'https://dev-priyanshi.onrender.com/api/alldl',
   
   // Bot Info
-  CREATOR: 'Darrell Mucheri (Mr Frank)',
-  BOT_NAME: '𝙃𝙚𝙘𝙩𝙞𝙘 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 𝘽𝙮 𝙈𝙧 𝙁𝙧𝙖𝙣𝙠',
+  CREATOR: 'Priyanshi Kaur',
+  BOT_NAME: '𝙋𝙧𝙤 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 𝘽𝙤𝙩',
   
-  // Developer Info, I intentionally made these variable to see who dares to change. At least give credits to Me ( Mr Frank )
+  // Developer Info
   DEVELOPER: {
-    name: 'Mr Frank',
-    telegram: 't.me/mrfrankofc',
-    github: 'github.com/mrfr8nk',
-    whatsapp: '+263719647303'
+    name: 'Priyanshi Kaur',
+    facebook: 'https://www.facebook.com/PriyanshiKaurJi',
+    telegram: 'PriyanshiKaur'
   },
   
   // Start Menu Image
-  START_IMAGE: 'https://dabby.vercel.app/hect.jpg',
+  START_IMAGE: 'https://i.postimg.cc/CLsvy8vL/Nayan-Not-Available.jpg',
   
   // Features
-  AUTO_DELETE_TIMEOUT: 60000, // 60 seconds
-  SEARCH_RESULTS_LIMIT: 12,
+  AUTO_DELETE_TIMEOUT: 60000,
   
   // Loading Animation
   LOADING_FRAMES: ['⏳', '⌛', '⏳', '⌛'],
   
+  // Supported Platforms
+  PLATFORMS: {
+    instagram: { name: 'Instagram', icon: '📸', regex: /(?:https?:\/\/)?(?:www\.)?instagram\.com\/(?:p|reel|stories)\/[\w-]+/i },
+    facebook: { name: 'Facebook', icon: '👍', regex: /(?:https?:\/\/)?(?:www\.)?facebook\.com\/\S+\/video\S*/i },
+    tiktok: { name: 'TikTok', icon: '🎵', regex: /(?:https?:\/\/)?(?:www\.)?(?:vm\.)?tiktok\.com\/[\w@]+/i },
+    youtube: { name: 'YouTube', icon: '🎬', regex: /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/\S+/i }
+  },
+  
   // Messages
   WELCOME_MESSAGE: `╭════════════════⟢
-│  🎬 𝙃𝙚𝙘𝙩𝙞𝙘 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 🎬  
+│  🎬 𝙋𝙧𝙖𝙣 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙚𝙧 🎬  
 ╰════════════════⟢
 
-🌟 *Welcome to the Ultimate YouTube Downloader!*
+🌟 *Welcome to the Pro Downloader Bot!*
 
 📥 *How to use:*
 ━━━━━━━━━━━━━━━━━━━━
-1️⃣ Send me a YouTube link OR search query
-2️⃣ If searching, reply with the number (1-10)
-3️⃣ Choose your preferred quality
-4️⃣ Media sent directly to Telegram!
+1️⃣ Send me a video link from:
+   • 📸 Instagram (posts, reels, stories)
+   • 👍 Facebook (videos)
+   • 🎵 TikTok (videos)
+   • 🎬 YouTube (videos)
+2️⃣ Choose your preferred quality
+3️⃣ Media sent directly to Telegram!
 
 ✨ *Features:*
 ━━━━━━━━━━━━━━━━━━━━
-🔍 YouTube search with top 10 results
-🎥 Multiple video qualities (144p - 1080p)
-🎵 Audio-only downloads (MP3)
+📸 Instagram posts, reels & stories
+👍 Facebook videos
+🎵 TikTok videos  
+🎬 YouTube videos & search
 ⚡ Fast and reliable
 🧹 Auto-cleanup messages
 
 📱 *Commands:*
 ━━━━━━━━━━━━━━━━━━━━
 /help - Show help menu
-/developer - Developer contact info
+/developer - Developer contact
 /uptime - Bot uptime status
-/users - User statistics
 /system - System information
 
-\`\`\`𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝘽𝙮 𝙈𝙧 𝙁𝙧𝙖𝙣𝙠\`\`\`
+\`\`\`𝘾𝙧𝙚𝙖𝙩𝙚𝙙 𝙱𝙮 𝙋𝙞𝙖𝙮𝙖𝙣𝙨𝙝𝙞 𝙆𝙖𝙪𝙧\`\`\`
 
-Send me a YouTube link or search query to get started! 🚀`,
+Send me a link to get started! 🚀`,
 
   HELP_MESSAGE: `╔═══════════════
 ║    📖 𝙃𝙚𝙡𝙥 𝙈𝙚𝙣𝙪    
@@ -73,22 +82,23 @@ Send me a YouTube link or search query to get started! 🚀`,
 /help - Show this help message
 /developer - Developer contact info
 /uptime - Check bot uptime
-/users - View user statistics
 /system - System information
+
+*Supported Platforms:*
+━━━━━━━━━━━━━━━━━━━━
+📸 Instagram - posts, reels, stories
+👍 Facebook - video posts
+🎵 TikTok - video content
+🎬 YouTube - videos & search
 
 *How to download:*
 ━━━━━━━━━━━━━━━━━━━━
-1️⃣ Send a YouTube URL or search query
-2️⃣ If searching, choose from top 10 results
+1️⃣ Send a video link or search query
+2️⃣ If searching, choose from results
 3️⃣ Select your preferred quality
 4️⃣ Media sent directly to Telegram!
 
-*Supported formats:*
-━━━━━━━━━━━━━━━━━━━━
-🎵 Audio: MP3
-📹 Video: 144p, 240p, 360p, 480p, 720p, 1080p
-
 ⚠️ *Note:* Messages auto-delete after 60 seconds!
 
-👨‍💻 *Created by:* 𝙈𝙧 𝙁𝙧𝙖𝙣𝙠`
+👨‍💻 *Created by:* 𝙿𝚛𝚒𝚢𝚊𝚗𝚜𝚑𝚒 𝙺𝚊𝚞𝚛`
 };

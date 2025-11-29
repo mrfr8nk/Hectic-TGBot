@@ -1,0 +1,57 @@
+Add ig downloader
+https://dev-priyanshi.onrender.com/api/alldl?url=https%3A%2F%2Fwww.instagram.com%2Freel%2FDQ8JME7gsFd%2F%3Figsh%3DdTYxY2M1bmtmbmV3
+
+
+{
+  "status": true,
+  "operator": "𝙿𝚛𝚒𝚢𝚊𝚗𝚜𝚑𝚒 𝙺𝚊𝚞𝚛",
+  "developer": "Priyanshi Kaur",
+  "devfb": "https://www.facebook.com/PriyanshiKaurJi",
+  "devwp": "Request For The Number In Facebook. Only For Business Chat",
+  "data": {
+    "title": "undefined💔",
+    "thumbnail": "https://d.rapidcdn.app/thumb?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWFtczItMS5jZG5pbnN0YWdyYW0uY29tL3YvdDE1LjUyNTYtMTAvNTgxNDI4ODE3Xzc2MzQ1Mjk2MDA4MDk0Ml8yMDE3Nzg2MzQ4MzM2MDI2MTc1X24uanBnP3N0cD1jMC40MjAuMTA4MC4xMDgwYV9kc3QtanBnX2UzNV9zNjQweDY0MF9zaDAuMDhfdHQ2Jl9uY19odD1zY29udGVudC1hbXMyLTEuY2RuaW5zdGFncmFtLmNvbSZfbmNfY2F0PTEwMiZfbmNfb2M9UTZjWjJRRWpuYWM5ME5kVEdTVkFzbTFBaHlwcGZDUWFKWlFaYUhURUhJWXBmQ0VjMDN4aEFRMDV0SEpQLWs1OEZHcFlzRncmX25jX29oYz1uSHRuNXVrR3gwSVE3a052d0Z6a0hfciZfbmNfZ2lkPVhKRjBhRjlDa3dLTVEwREc2Z0ZIMGcmZWRtPUFQczE3Q1VBQUFBQSZjY2I9Ny01Jm9oPTAwX0FmaWZaYWZuZk5UdWt1ejgxQ0RKdVluMXUtSUJWMzhjaS0waHNrTk91SlRvT1Emb2U9NjkzMDcyNDkmX25jX3NpZD0xMGQxM2IiLCJoZWFkZXJzIjp7InVzZXItYWdlbnQiOiJUZWxlZ3JhbUJvdCAobGlrZSBUd2l0dGVyQm90KSJ9LCJpYXQiOjE3NjQzOTU5MzB9.btRifCaHFgfZxBeldsjj4Dxv5Gj95S21SOYBkTNNpqM",
+    "low": "https://d.rapidcdn.app/v2?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWFtczItMS5jZG5pbnN0YWdyYW0uY29tL28xL3YvdDE2L2YyL202OS9BUU9CRnNaM013RXZlNUZFY1Ryd1hwRHp3ZGJHY2l5TE04U2tiMzc0dFNXRF9JZ0NuZ21tMnlZcXRYTFJSQkNYZG5oSHNFdkNPRGo4UExRYTA1SEFCdC05UkVXVGQyb25Ca3RhUFlCejNwZGVFamkzUDhsMnpWZ2ZJN0kubXA0P3N0cD1kc3QtbXA0JmVmZz1leUoyYVdSbGIxOXBaQ0k2SWpFek5UZ3pNakl5TXpJek16a3hORGtpTENKeFpWOW5jbTkxY0hNaU9pSmJYQ0pwWjE5d2NtOW5jbVZ6YzJsMlpWOTFjbXhuWlc0dWNISnZaSFZqZEY5MGVYQmxMbU5zYVhCelhDSmRJaXdpZG1WdVkyOWtaVjkwWVdjaU9pSnBaMTl3Y205bmNtVnpjMmwyWlY5MWNteG5aVzR1WTJ4cGNITXVZekl1YzNabFgzTmtJbjAmX25jX2NhdD0xMDkmY2NiPTktNCZvaD0wMF9BZmdxV0IxV1BnMkc5LUNHTWJRd01kZXRta2NnMDdtWTk4aUlMbVRPRTBqYkpnJm9lPTY5MkM3NzZFJl9uY19zaWQ9MTBkMTNiIiwiZmlsZW5hbWUiOiJzbmFwc2F2ZS1hcHBfMzc2MzkyMzgwMDkyMDYwNTAyMS5tcDQiLCJoZWFkZXJzIjp7InVzZXItYWdlbnQiOiJUZWxlZ3JhbUJvdCAobGlrZSBUd2l0dGVyQm90KSJ9LCJpYXQiOjE3NjQzOTU5MzB9.rdd-l3m2YtKN81UpeEJkqHNh0Q1Dnu_QogEJwlJPnZU&dl=1&dl=1",
+    "high": "https://d.rapidcdn.app/v2?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWFtczItMS5jZG5pbnN0YWdyYW0uY29tL28xL3YvdDE2L2YyL202OS9BUU9CRnNaM013RXZlNUZFY1Ryd1hwRHp3ZGJHY2l5TE04U2tiMzc0dFNXRF9JZ0NuZ21tMnlZcXRYTFJSQkNYZG5oSHNFdkNPRGo4UExRYTA1SEFCdC05UkVXVGQyb25Ca3RhUFlCejNwZGVFamkzUDhsMnpWZ2ZJN0kubXA0P3N0cD1kc3QtbXA0JmVmZz1leUoyYVdSbGIxOXBaQ0k2SWpFek5UZ3pNakl5TXpJek16a3hORGtpTENKeFpWOW5jbTkxY0hNaU9pSmJYQ0pwWjE5d2NtOW5jbVZ6YzJsMlpWOTFjbXhuWlc0dWNISnZaSFZqZEY5MGVYQmxMbU5zYVhCelhDSmRJaXdpZG1WdVkyOWtaVjkwWVdjaU9pSnBaMTl3Y205bmNtVnpjMmwyWlY5MWNteG5aVzR1WTJ4cGNITXVZekl1YzNabFgzTmtJbjAmX25jX2NhdD0xMDkmY2NiPTktNCZvaD0wMF9BZmdxV0IxV1BnMkc5LUNHTWJRd01kZXRta2NnMDdtWTk4aUlMbVRPRTBqYkpnJm9lPTY5MkM3NzZFJl9uY19zaWQ9MTBkMTNiIiwiZmlsZW5hbWUiOiJzbmFwc2F2ZS1hcHBfMzc2MzkyMzgwMDkyMDYwNTAyMS5tcDQiLCJoZWFkZXJzIjp7InVzZXItYWdlbnQiOiJUZWxlZ3JhbUJvdCAobGlrZSBUd2l0dGVyQm90KSJ9LCJpYXQiOjE3NjQzOTU5MzB9.rdd-l3m2YtKN81UpeEJkqHNh0Q1Dnu_QogEJwlJPnZU&dl=1&dl=1"
+  }
+}
+ Fb
+https://dev-priyanshi.onrender.com/api/alldl?url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fv%2F1BfPuWZXBW%2F
+
+{
+  "status": true,
+  "operator": "𝙿𝚛𝚒𝚢𝚊𝚗𝚜𝚑𝚒 𝙺𝚊𝚞𝚛",
+  "developer": "Priyanshi Kaur",
+  "devfb": "https://www.facebook.com/PriyanshiKaurJi",
+  "devwp": "Request For The Number In Facebook. Only For Business Chat",
+  "data": {
+    "title": "Facebook",
+    "thumbnail": "https://i.postimg.cc/CLsvy8vL/Nayan-Not-Available.jpg",
+    "low": "https://video-iad3-2.xx.fbcdn.net/o1/v/t2/f2/m412/AQPXLNNkN_SFe1pztqMALYC2BqfgGVLOWEjtS1KUfUV5O3taVcqGrygliKZid8CU8fzx6sgE9FN1d4yc_DFf0yvbAL81aMsyl7pTrSCelA.mp4?_nc_cat=105&_nc_sid=8bf8fe&_nc_ht=video-iad3-2.xx.fbcdn.net&_nc_ohc=5FysACEq1xYQ7kNvwH0bcZW&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5GQUNFQk9PSy4uQzMuMzYwLnN2ZV9zZCIsInhwdl9hc3NldF9pZCI6ODcxOTM5OTY1MTc5NTk5LCJhc3NldF9hZ2VfZGF5cyI6MzIsInZpX3VzZWNhc2VfaWQiOjEwMTIyLCJkdXJhdGlvbl9zIjoxNTQxLCJ1cmxnZW5fc291cmNlIjoid3d3In0%3D&ccb=17-1&_nc_gid=hIGHFeTSF02Ul8mcBbjbFQ&_nc_zt=28&oh=00_AfikFp-IVn2s2Smm_29KFQVzzD_h3ZOhoCgrceUajABLOQ&oe=69307645&bitrate=217852&tag=sve_sd&dl=1",
+    "high": "https://video-iad3-1.xx.fbcdn.net/o1/v/t2/f2/m366/AQPzZOV2m9x1TSLK1SKxzuyVOn_3DgiPB2VUSqfYhX9uApypbgbDayWJ_WmrkRcKFiGsCbI3cREEglAVap3Gkz8bB96yfjn1d1AlUwtgo59cZQ.mp4?_nc_cat=1&_nc_sid=5e9851&_nc_ht=video-iad3-1.xx.fbcdn.net&_nc_ohc=lqEr5aZ7ZjcQ7kNvwGFMP1r&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5GQUNFQk9PSy4uQzMuNzIwLmRhc2hfaDI2NC1iYXNpYy1nZW4yXzcyMHAiLCJ4cHZfYXNzZXRfaWQiOjg3MTkzOTk2NTE3OTU5OSwiYXNzZXRfYWdlX2RheXMiOjMyLCJ2aV91c2VjYXNlX2lkIjoxMDEyMiwiZHVyYXRpb25fcyI6MTU0MSwidXJsZ2VuX3NvdXJjZSI6Ind3dyJ9&ccb=17-1&vs=c018ec3ae3fe1742&_nc_vs=HBksFQIYRWZiX2VwaGVtZXJhbC9ERTQ1QjAxOUJCMjRFMDkyNjA0QzMwMjc5NzI4QzM4Nl9tdF8xX3ZpZGVvX2Rhc2hpbml0Lm1wNBUAAsgBEgAVAhhAZmJfcGVybWFuZW50Lzc5NEQ3Qzg4NkE5QUU2NENEQzU4ODkyOEQ3QjdBOUFBX2F1ZGlvX2Rhc2hpbml0Lm1wNBUCAsgBEgAoABgAGwKIB3VzZV9vaWwBMRJwcm9ncmVzc2l2ZV9yZWNpcGUBMRUAACae257-ysGMAxUCKAJDMywXQJgUU_fO2RcYGWRhc2hfaDI2NC1iYXNpYy1nZW4yXzcyMHARAHUCZZSeAQA&_nc_gid=hIGHFeTSF02Ul8mcBbjbFQ&_nc_zt=28&oh=00_AfhRx9VQzM4WiklNDThIERwI7YgrfWQLo-6qLhxeaNp_UA&oe=69305202&bitrate=815835&tag=dash_h264-basic-gen2_720p&dl=1"
+  }
+}
+
+
+Tiktok
+
+https://dev-priyanshi.onrender.com/api/alldl?url=https%3A%2F%2Fvm.tiktok.com%2FZMAKcAKyn%2F
+
+{
+  "status": true,
+  "operator": "𝙿𝚛𝚒𝚢𝚊𝚗𝚜𝚑𝚒 𝙺𝚊𝚞𝚛",
+  "developer": "Priyanshi Kaur",
+  "devfb": "https://www.facebook.com/PriyanshiKaurJi",
+  "devwp": "Request For The Number In Facebook. Only For Business Chat",
+  "data": {
+    "title": "#fypシ゚ #justforfun ",
+    "thumbnail": "https://p16-sign-va.tiktokcdn.com/tos-maliva-p-0068/oAPkpUhaIBKt1qABPPEmIosWSig8BSQiBI4Ai~tplv-tiktokx-360p.webp?dr=1363&refresh_token=717ec432&x-expires=1764482400&x-signature=IofYZKii4CkqGozA2qPgtOSi10I%3D&t=bacd0480&ps=d97f9a4f&shp=d05b14bd&shcp=1d1a97fc&idc=maliva&biz_tag=tt_video&s=AWEME_DETAIL&sc=feed_cover",
+    "low": "https://v19.tiktokcdn.com/0de901e7f2bee75b818f7c336ae1403f/692bddcc/video/tos/useast2a/tos-useast2a-ve-0068c004/oAIDpKVrwDwCEBsUftaBiTCAERJBQENQRQfFRU/?a=1233&bti=OUBzOTg7QGo6OjZAL3AjLTAzYCMxNDNg&ch=0&cr=13&dr=0&er=0&lr=all&net=0&cd=0%7C0%7C0%7C&cv=1&br=1138&bt=569&cs=0&ds=6&ft=XsFb_qT0mcRPD127mzSs3wUzJhXyMeF~O5&mime_type=video_mp4&qs=4&rc=ZDQ4ZGVnNmY7NmZmOjo0PEBpMzU5NW85cmY1NzMzNzczM0A2MzUuYDVfXl4xMS8vMC0zYSNfZzFpMmQ0YWhhLS1kMTZzcw%3D%3D&vvpl=1&l=20251129140139B838FFBBBD610D770B04&btag=e000b0000&cc=4",
+    "high": "https://v19.tiktokcdn.com/0de901e7f2bee75b818f7c336ae1403f/692bddcc/video/tos/useast2a/tos-useast2a-ve-0068c004/oAIDpKVrwDwCEBsUftaBiTCAERJBQENQRQfFRU/?a=1233&bti=OUBzOTg7QGo6OjZAL3AjLTAzYCMxNDNg&ch=0&cr=13&dr=0&er=0&lr=all&net=0&cd=0%7C0%7C0%7C&cv=1&br=1138&bt=569&cs=0&ds=6&ft=XsFb_qT0mcRPD127mzSs3wUzJhXyMeF~O5&mime_type=video_mp4&qs=4&rc=ZDQ4ZGVnNmY7NmZmOjo0PEBpMzU5NW85cmY1NzMzNzczM0A2MzUuYDVfXl4xMS8vMC0zYSNfZzFpMmQ0YWhhLS1kMTZzcw%3D%3D&vvpl=1&l=20251129140139B838FFBBBD610D770B04&btag=e000b0000&cc=4"
+  }
+}
+
+
+
+If user just send link use regex to call api then the rest 7 oniw what to do uodate the thing into  a pro bot
+
