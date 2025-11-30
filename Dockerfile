@@ -25,13 +25,12 @@ RUN mkdir build && cd build && \
 WORKDIR /app
 RUN mkdir -p /var/lib/telegram-bot-api
 
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Expose port
 EXPOSE 8081
 
-# Run Telegram Bot API in local mode
-CMD ["telegram-bot-api", \
-     "--api-id=${TELEGRAM_API_ID}", \
-     "--api-hash=${TELEGRAM_API_HASH}", \
-     "--dir=/var/lib/telegram-bot-api", \
-     "--local", \
-     "--http-port=8081"]
+# Run entrypoint script
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
